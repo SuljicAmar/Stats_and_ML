@@ -1,0 +1,38 @@
+---
+title: "Central Limit Theorem"
+format: html
+---
+
+Sample means drawn from a population will approximate a normal distribution (given enough draws / samples) and will approximate the mean of the population, regardless of the true distribution of the population. [^1]
+
+[^1]: *Population dsitribution must have finite variance*
+
+For this demonstration we use the exponential distribution, but as mentioned any distribution with a finite variance works.
+
+```{python}
+import numpy as np
+import seaborn as sns
+
+population = np.random.exponential(np.random.uniform(0.1, 100), 10000)
+
+N_draws = 1000
+
+N_samples = 50
+
+means_of_draws = np.zeros(N_draws)
+
+for iDraw in range(N_draws):
+    means_of_draws[iDraw] = np.mean(np.random.choice(population, N_samples, replace=True))
+```
+
+```{python}
+#| fig-cap: "Distribution of sample means"
+sns.displot(means_of_draws)
+```
+
+```{python}
+population_mean = np.mean(population)
+samples_mean = np.mean(means_of_draws)
+
+print("True mean: ", round(population_mean, 2), "\nApprox mean: ", round(samples_mean, 2))
+```
